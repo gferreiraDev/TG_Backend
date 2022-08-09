@@ -74,7 +74,7 @@ const mocks = {
       zipcode: '00000-111',
     },
     password: '123senha4',
-    rating: 5.2
+    rating: 4.2
   },
   nullSeller: {
     profile: null,

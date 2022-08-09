@@ -366,13 +366,11 @@ describe('Testes Unitários - SellerService', () => {
 
   it('should successfuly list sellers', async () => {
     await service.create(mocks.seller);
-    await service.create(mocks.seller1);
 
     const result = await service.findAll();
 
     expect(result).resolves;
-    expect(result.length).toBe(2);
+    expect(result.length).toBe(1);
     expect(result[0].tradingName).toEqual(mocks.seller.tradingName);
-    expect(result[1].tradingName).toEqual(mocks.seller1.tradingName);
   });
 });

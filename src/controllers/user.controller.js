@@ -4,6 +4,7 @@ require('dotenv').config();
 
 const customerService = require('../services/customer.service');
 const sellerService = require('../services/seller.service');
+const stockService = require('../services/stock.service');
 
 const generateToken = (params = {}) => {
   return jwt.sign(params, process.env.SECRET, { expiresIn: 84600 });
@@ -28,8 +29,10 @@ exports.register = (req, res) => {
         if (alreadyExists)
           return res.status(400).send({ error: true, message: 'Usuário já cadastrado' });
         
-        return sellerService.create(req.body).then(result => {
-          return res.status(201).send(result);
+        return sellerService.create(req.body).then(seller => {
+          return stockService.createStock(seller._id).then(result => {
+            return res.status(201).send(result);
+          });
         });
       });
     }
