@@ -4,12 +4,10 @@ const avatar = 'https://cdn1.iconfinder.com/data/icons/unigrid-finance-vol-2/61/
 
 const Product = new mongoose.Schema({
   category: { type: String, require: true },
-  productName: { type: String, require: true },
-  // description: { type: String, require: true },
-  trend: { type: String, require: true },
-  barcode: { type: String, require: true },
+  name: { type: String, require: true },
+  brand: { type: String, require: true },
+  eancode: { type: String, require: true },
   measureUnit: { type: String, require: true },
-  // packageDescription: { type: String, require: true },
   image: { type: String, default: avatar },
   volume: {},
   perishable: { type: Boolean, require: true },
@@ -18,17 +16,8 @@ const Product = new mongoose.Schema({
   minStock: { type: Number || String, require: true },
   currentStock: { type: Number || String, require: true },
   price: { type: Number || String, require: true },
-  // promotion: {
-  //   active: { type: Boolean, default: false },
-  //   price: { type: Number, default: 0.0 }
-  // },
-  createdAt: { type: Date, default: Date.now() }
-}, { _id: true });
-
-
-const Stock = new mongoose.Schema({
   sellerId: { type: mongoose.Types.ObjectId, ref: 'Seller', require: true },
-  products: [Product]
+  createdAt: { type: Date, default: Date.now() }
 });
 
-module.exports = mongoose.model('Stock', Stock);
+module.exports = mongoose.model('Product', Product);

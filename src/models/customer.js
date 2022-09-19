@@ -4,7 +4,7 @@ const avatar = 'https://media.istockphoto.com/photos/deep-learning-artificial-in
 
 
 const Address = new mongoose.Schema({
-  title: { type: String, require: true },
+  title: { type: String, default: 'Novo Endereço' },
   streetName: { type: String, require: true },
   number: { type: String, require: true },
   complement: { type: String, default: '-' },
@@ -22,7 +22,7 @@ const Customer = new mongoose.Schema({
   cpf: { type: String, require: true, unique: true },
   avatar: { type: String, default: avatar },
   phone: { type: String, require: true },
-  addressList: [Address],
+  address: [Address],
   password: { type: String, require: true, select: false },
   createdAt: { type: Date, default: Date.now() }
 });

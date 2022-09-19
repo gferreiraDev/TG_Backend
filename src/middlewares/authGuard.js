@@ -3,6 +3,7 @@ require('dotenv').config();
 
 exports.authenticate = (req, res, next) => {
   const authorization = req.headers.authorization;
+  console.log('auth', authorization, 'params', req.params);
 
   if (!authorization)
     return res.status(401).send({ error: true, message: 'Token não informado' });

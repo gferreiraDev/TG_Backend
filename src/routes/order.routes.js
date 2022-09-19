@@ -7,6 +7,6 @@ const router = Router();
 router.post('/new', authGuard.authenticate, orderController.placeOrder);
 router.get('/:orderId', orderController.findOrder);
 router.get('/list', authGuard.authenticate, orderController.listOrders);
-router.patch('/update', authGuard.authenticate, orderController.updateProduct);
+router.put('/update', authGuard.authenticate, orderController.updateOrder);
 
 module.exports = router;

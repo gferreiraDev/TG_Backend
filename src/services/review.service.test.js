@@ -11,7 +11,7 @@ const mocks = {
     email: 'usertest@mail.com',
     phone: '(11) 99999-8888',
     cpf: '010.020.030-40',
-    addressList: {
+    address: {
       title: 'Casa',
       streetName: 'Rua Teste',
       number: '123A',

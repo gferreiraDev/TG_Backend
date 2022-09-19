@@ -18,9 +18,11 @@ exports.createStock = async (sellerId) => {
   }
 }
 
-exports.addProduct = async (stockId, data) => {
+exports.addProduct = async (seller, data) => {
   try {
-    return await Stock.findByIdAndUpdate(stockId, {$push: {products: data}}, { new: true });
+    console.log('Seller', seller, 'product', data);
+
+    return await Stock.findOneAndUpdate({sellerId: seller}, {$push: {products: data}}, { new: true });
   } catch (error) {
     // console.log(error);
     return new Error(error);
@@ -45,11 +47,19 @@ exports.findProduct = async (stockId, productId) => {
   }
 }
 
-exports.listByCategory = async (stockId, category) => {
+exports.listBySearch = async (sellerId, search) => {
   try {
-    if (category)
-      return await Stock.find({_id: stockId, 'products.category': category});
-    return await Stock.findById(stockId);
+    return await Stock.aggregate([
+      { $match: { sellerId } },
+      { $match: {
+          "products.productName": {
+            $regex: `.*${search}.*`,
+            $options: "i"
+          }
+        }
+      }
+    ])
+
   } catch (error) {
     // console.log(error);
     return new Error(error);

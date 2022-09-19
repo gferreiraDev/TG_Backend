@@ -1,6 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
-const routes = require('./routes/router');
+const router = require('./routes/router');
 
 const app = express();
 
@@ -17,7 +17,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(routes);
+app.use(router);
 
 app.use((req, res, next) => {
   const error = new Error('Nothing found');

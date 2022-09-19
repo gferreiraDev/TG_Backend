@@ -19,7 +19,22 @@ exports.addToStock = (req, res) => {
 
 exports.listProducts = (req, res) => {
   try {
-    return stockService.listProducts(req.body.seller).then(result => {
+    const {store, query} = req.body;
+    console.log('store', store, 'query', query);
+
+    if (!store)
+      return res.status(400).send({ error: true, message: 'Vendedor não identificado'});
+    
+    if (query !== '' && query !== undefined && query !== null) {
+      return stockService.listBySearch(store, query)
+      .then(result => {
+        // console.log('Search result', result);
+        return res.status(200).send(result);  
+      })
+    }
+
+    return stockService.listProducts(store).then(result => {
+      // console.log(result)
       return res.status(200).send(result);
     });
   } catch (e) {
@@ -56,3 +71,14 @@ exports.deleteStock = (req, res) => {
     return res.status(e.status).send({ error: true, message: e.message });
   }
 }
+
+// exports.searchProducts = (req, res) => {
+//   try {
+//     return stockService.listProducts(req.body).then(result => {
+//       console.log(result)
+//       return res.status(200).send(result);
+//     });
+//   } catch (e) {
+//     return res.status(e.status).send({ error: true, message: e.message });
+//   }
+// }

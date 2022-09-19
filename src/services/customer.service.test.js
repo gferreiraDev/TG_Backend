@@ -8,7 +8,7 @@ const mocks = {
     email: 'usertest@mail.com',
     phone: '(11) 99999-8888',
     cpf: '010.020.030-40',
-    addressList: {
+    address: {
       title: 'Casa',
       streetName: 'Rua Teste',
       number: '123A',
@@ -26,7 +26,7 @@ const mocks = {
     email: null,
     phone: null,
     cpf: null,
-    addressList: {
+    address: {
       title: null,
       streetName: null,
       number: null,
@@ -44,7 +44,7 @@ const mocks = {
     email: undefined,
     phone: undefined,
     cpf: undefined,
-    addressList: {
+    address: {
       title: undefined,
       streetName: undefined,
       number: undefined,
@@ -327,7 +327,7 @@ describe('Testes Unitários - CustomerService', () => {
     const result = await service.addAddress(registered._id, newAddress);
 
     expect(result).resolves;
-    expect(result.addressList.length).toBe(2);
+    expect(result.address.length).toBe(2);
   });
   
   it('should prevent adding an empty address', async () => {
@@ -360,7 +360,7 @@ describe('Testes Unitários - CustomerService', () => {
     const registered = await service.create(mocks.customer);
 
     const update = {
-      _id: registered.addressList[0]._id,
+      _id: registered.address[0]._id,
       title: 'Casa',
       streetName: 'Updated Street Name',
       number: '123A',
@@ -374,13 +374,13 @@ describe('Testes Unitários - CustomerService', () => {
     const result = await service.updateAddress(registered._id, update);
     
     expect(result).resolves;
-    expect(result.addressList[0].streetName).toBe('Updated Street Name');
+    expect(result.address[0].streetName).toBe('Updated Street Name');
   });
   
   it('should prevent updating an unexisting address', async () => {
     const registered = await service.create(mocks.customer);
 
-    const updatedAddress = { ...registered.addressList[0], _id: 'invalidID' };
+    const updatedAddress = { ...registered.address[0], _id: 'invalidID' };
 
     const result = await service.updateAddress(registered._id, updatedAddress);
 
@@ -391,7 +391,7 @@ describe('Testes Unitários - CustomerService', () => {
     const registered = await service.create(mocks.customer);
 
     const updatedAddress = { 
-      _id: registered.addressList[0]._id,
+      _id: registered.address[0]._id,
       title: null,
       streetName: null,
       number: null,
@@ -411,7 +411,7 @@ describe('Testes Unitários - CustomerService', () => {
     const registered = await service.create(mocks.customer);
 
     const updatedAddress = { 
-      _id: registered.addressList[0]._id,
+      _id: registered.address[0]._id,
       title: undefined,
       streetName: undefined,
       number: undefined,
@@ -443,11 +443,11 @@ describe('Testes Unitários - CustomerService', () => {
 
     await service.addAddress(registered._id, newAddress);
 
-    const result = await service.deleteAddress(registered._id, registered.addressList[0]._id);
+    const result = await service.deleteAddress(registered._id, registered.address[0]._id);
 
     expect(result).resolves;
-    expect(result.addressList.length).toBe(1);
-    expect(result.addressList[0].title).toEqual('Faculdade');
+    expect(result.address.length).toBe(1);
+    expect(result.address[0].title).toEqual('Faculdade');
   });
   
   it('should prevent deleting an unexisting address', async () => {

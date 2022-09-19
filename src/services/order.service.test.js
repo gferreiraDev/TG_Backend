@@ -12,7 +12,7 @@ const mocks = {
     email: 'ana.maria@gmail.com',
     phone: '(11) 98798-8989',
     cpf: '100.200.300-40',
-    addressList: {
+    address: {
       title: 'Casa',
       streetName: 'Rua Teste',
       number: '123A',
@@ -132,7 +132,7 @@ describe('Testes de Integração OrderService', () => {
       orderNumber: '202208109999',
       orderType: 'Entrega',
       origin: seller.address.position,
-      destination: customer.addressList[0].position,
+      destination: customer.address[0].position,
       items: {
         productId: list.products[0]._id,
         currentPrice: list.products[0].price,
@@ -178,7 +178,7 @@ describe('Testes de Integração OrderService', () => {
       orderNumber: '202208109999',
       orderType: 'Entrega',
       origin: seller.address.position,
-      destination: customer.addressList[0].position,
+      destination: customer.address[0].position,
       items: {},
       volume: {
         packs: 1,
@@ -219,7 +219,7 @@ describe('Testes de Integração OrderService', () => {
       orderNumber: '202208109999',
       orderType: 'Entrega',
       origin: seller.address.position,
-      destination: customer.addressList[0].position,
+      destination: customer.address[0].position,
       items: {
         productId: list.products[0]._id,
         currentPrice: list.products[0].price,
@@ -250,7 +250,7 @@ describe('Testes de Integração OrderService', () => {
       orderNumber: '202208109999',
       orderType: 'Entrega',
       origin: seller.address.position,
-      destination: customer.addressList[0].position,
+      destination: customer.address[0].position,
       items: {
         productId: list.products[0]._id,
         currentPrice: list.products[0].price,

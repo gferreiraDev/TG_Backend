@@ -1,6 +1,5 @@
 const Customer = require('../models/customer');
 
-
 exports.exists = async (email, cpf) => {
   try {
     return await Customer.findOne({ $or: [{ email }, { cpf }] });
@@ -59,7 +58,7 @@ exports.delete = async (userId) => {
 
 exports.addAddress = async (userId, address) => {
   try {
-    return await Customer.findByIdAndUpdate(userId, {$push: {addressList: address}}, { new: true });
+    return await Customer.findByIdAndUpdate(userId, {$push: {address: address}}, { new: true });
   } catch (error) {
     // console.log(error);
     return new Error(error);
@@ -68,7 +67,7 @@ exports.addAddress = async (userId, address) => {
 
 exports.updateAddress = async (userId, address) => {
   try {
-    return await Customer.findOneAndUpdate({ _id: userId, 'addressList._id': address._id }, {$set: {'addressList.$': address}}, {new: true});
+    return await Customer.findOneAndUpdate({ _id: userId, 'address._id': address._id }, {$set: {'address.$': address}}, {new: true});
   } catch (error) {
     // console.log(error);
     return new Error(error);
@@ -77,7 +76,7 @@ exports.updateAddress = async (userId, address) => {
 
 exports.deleteAddress = async(userId, addressId) => {
   try {
-    return await Customer.findByIdAndUpdate(userId, {$pull: {'addressList': {'_id': addressId}}}, {new:true});
+    return await Customer.findByIdAndUpdate(userId, {$pull: {'address': {'_id': addressId}}}, {new:true});
   } catch (error) {
     // console.log(error);
     return new Error(error);

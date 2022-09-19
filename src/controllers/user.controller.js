@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const fs = require('fs');
 require('dotenv').config();
 
 const customerService = require('../services/customer.service');
@@ -12,6 +13,7 @@ const generateToken = (params = {}) => {
 
 exports.register = (req, res) => {
   try {
+    console.log(req.body);
     if (!req.body || !req.body.profile)
       return res.status(400).send({ error: true, message: 'Dados inválidos' });
 
@@ -51,6 +53,10 @@ exports.login = async (req, res) => {
     const customer = await customerService.findByEmail(email);
     const seller = await sellerService.findByEmail(email);
 
+    if (!customer && !seller) {
+      return res.status(400).send({ error: true, message: 'Usuário ou senha inválidos' });
+    }
+
     if (customer) {
       return bcrypt.compare(password, customer.password).then(result => {
         if (result) {
@@ -80,7 +86,7 @@ exports.login = async (req, res) => {
     }
     
   } catch (e) {
-    return res.status(e.status).send({ error: true, message: e.message });
+    return res.status(500).send({ error: true, message: e.message });
   }
 }
 
@@ -119,11 +125,12 @@ exports.userUpdate = (req, res) => {
 
     if (profile === 'Consumidor') {
       return customerService.update(_id, update).then(result => {
-        return res.status(200).send({ user: result });
+        return res.status(200).send(result);
       });
     } else {
       return sellerService.update(_id, update).then(result => {
-        return res.status(200).send({ user: result });
+        console.log(result)
+        return res.status(200).send(result);
       });
     }
     
@@ -162,7 +169,7 @@ exports.searchSellers = (req, res) => {
       return res.status(401).send({ error: true, message: 'Não autorizado' });
 
     return sellerService.findAll().then(result => {
-      return res.status(200).send({ sellers: result });
+      return res.status(200).send(result);
     });
     
   } catch (e) {
@@ -182,7 +189,7 @@ exports.includeAddress = (req, res) => {
       return res.status(400).send({ error: true, message: 'Dados inválidos' });
 
     return customerService.addAddress(_id, address).then(result => {
-      return res.status(201).send({ user: result });
+      return res.status(201).send(result);
     });
     
   } catch (e) {
@@ -193,7 +200,9 @@ exports.includeAddress = (req, res) => {
 exports.updateAddress = (req, res) => {
   try {
     const {profile, _id} = res.secret;
-    const {address} = req.body;
+    const address = req.body;
+
+    console.log(address)
 
     if (!profile || !_id)
       return res.status(401).send({ error: true, message: 'Não autorizado' });
@@ -203,11 +212,11 @@ exports.updateAddress = (req, res) => {
 
     if (profile === 'Consumidor') {
       return customerService.updateAddress(_id, address).then(result => {
-        return res.status(200).send({ user: result });
+        return res.status(200).send(result);
       });
     } else {
       return sellerService.updateAddress(_id, address).then(result => {
-        return res.status(200).send({ user: result });
+        return res.status(200).send(result);
       });
     }
 
@@ -220,19 +229,33 @@ exports.updateAddress = (req, res) => {
 exports.removeAddress = (req, res) => {
   try {
     const {profile, _id} = res.secret;
-    const {address} = req.body;
+    const {addressId} = req.params;
 
     if (!profile || !_id || profile === 'Vendedor')
       return res.status(401).send({ error: true, message: 'Não autorizado' });
 
-    if (!address)
+    if (!addressId)
       return res.status(400).send({ error: true, message: 'Dados inválidos' });
 
-    return customerService.removeAddress(_id, address._id).then(result => {
-      return res.status(201).send({ user: result });
+    return customerService.deleteAddress(_id, addressId).then(result => {
+      return res.status(201).send(result);
     });
     
   } catch (e) {
     return res.status(e.status).send({ error: true, message: e.message });
   }
+}
+
+exports.updateAvatar = (req, res) => {
+  console.log('fileData:', req.file);
+  console.log('auth', res.secret);
+
+  fs.readFile(req.file.path, (err, contents) => {
+    if (err) {
+      console.log('Error:', err);
+      return res.status(400).send({ error: true, message: err });
+    }
+    console.log('File contents', contents);
+    return res.status(200).send(contents);
+  })
 }
